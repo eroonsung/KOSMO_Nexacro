@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.0">
+  <Form id="freeRegForm" width="1280" height="720" titletext="New Form">
+    <Layouts>
+      <Layout height="720" mobileorientation="landscape" width="1280">
+        <Static id="Static01" taborder="0" text="직원명" left="80" top="120" width="120" height="40" textAlign="center" verticalAlign="middle" font="bold 14px/normal &quot;Gulim&quot;" background="lightgray" borderRadius="4px" onclick="Common_onclick"/>
+        <Static id="Static00" taborder="1" text="프리랜서 정보 저장" left="110" top="40" width="381" height="60" textAlign="center" font="bold 40px/normal &quot;Gulim&quot;" onclick="Common_onclick"/>
+        <Edit id="free_name" taborder="2" left="218" top="120" width="300" height="40" onclick="Common_onclick"/>
+        <Edit id="free_email" taborder="3" left="218" top="170" width="300" height="40" onclick="Common_onclick"/>
+        <Static id="Static01_00" taborder="4" text="이메일" left="80" top="170" width="120" height="40" textAlign="center" verticalAlign="middle" font="bold 14px/normal &quot;Gulim&quot;" background="lightgray" borderRadius="4px" onclick="Common_onclick"/>
+        <Static id="Static01_00_00" taborder="5" text="주민번호" left="80" top="220" width="120" height="40" textAlign="center" verticalAlign="middle" font="bold 14px/normal &quot;Gulim&quot;" background="lightgray" borderRadius="4px" onclick="Common_onclick"/>
+        <Edit id="free_jumin" taborder="6" left="218" top="220" width="192" height="40" onclick="Common_onclick" maxlength="7"/>
+        <Static id="Static04" taborder="7" text="기술" left="80" top="270" width="120" height="40" textAlign="center" verticalAlign="middle" font="bold 14px/normal &quot;Gulim&quot;" background="lightgray" borderRadius="4px"/>
+        <CheckBox id="skill1" taborder="8" left="218" top="270" width="70" height="40" text="Java"/>
+        <CheckBox id="skill2" taborder="9" left="285" top="270" width="70" height="40" text="JSP" truevalue="JSP"/>
+        <CheckBox id="skill3" taborder="10" left="345" top="270" width="70" height="40" text="Spring" truevalue="Spring"/>
+        <CheckBox id="skill5" taborder="11" left="495" top="270" width="70" height="40" text="Laf/J" truevalue="Spring"/>
+        <CheckBox id="skill4" taborder="12" left="415" top="270" width="76" height="40" text="Anyframe" truevalue="JSP"/>
+        <Static id="Static04_00" taborder="13" text="성별" left="80" top="320" width="120" height="40" textAlign="center" verticalAlign="middle" font="bold 14px/normal &quot;Gulim&quot;" background="lightgray" borderRadius="4px"/>
+        <Radio id="gender" taborder="14" left="218" top="320" width="90" height="40" onitemchanged="gender_onitemchanged" value="" text="" index="-1" innerdataset="ds_gender" codecolumn="gender_code" datacolumn="gender_name" direction="vertical"/>
+        <Button id="btn_free_reg" taborder="15" text="저장" left="200" top="375" width="100" height="30" onclick="btn_free_reg_onclick"/>
+        <Button id="btn_free_reset" taborder="16" text="초기화" left="318" top="375" width="100" height="30" onclick="btn_free_reset_onclick"/>
+      </Layout>
+    </Layouts>
+    <Bind>
+      <BindItem id="item0" compid="free_name" propid="value" datasetid="ds_emp" columnid="emp_name"/>
+      <BindItem id="item1" compid="free_email" propid="value" datasetid="ds_emp" columnid="emp_name"/>
+      <BindItem id="item2" compid="free_jumin" propid="value" datasetid="ds_emp" columnid="emp_name"/>
+      <BindItem id="item3" compid="skill1" propid="value" datasetid="ds_emp" columnid="skill1"/>
+      <BindItem id="item4" compid="skill2" propid="value" datasetid="ds_emp" columnid="skill2"/>
+      <BindItem id="item5" compid="skill3" propid="value" datasetid="ds_emp" columnid="skill3"/>
+      <BindItem id="item6" compid="skill5" propid="value" datasetid="ds_emp" columnid="skill3"/>
+      <BindItem id="item7" compid="skill4" propid="value" datasetid="ds_emp" columnid="skill2"/>
+    </Bind>
+    <Script type="xscript5.1"><![CDATA[
+
+
+this.btn_free_reg_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	
+//this => form 태그를 관리하는 객체의 메위주
+	var free_name = this.free_name.value;
+	var free_email = this.free_email.value;
+	var free_jumin = this.free_jumin.value;
+	var skill1 = this.skill1.value;
+	var skill2 = this.skill2.value;
+	var skill3 = this.skill3.value;
+	var skill4 = this.skill4.value;
+	var skill5 = this.skill5.value;
+	var gender = this.gender.value;
+
+	
+	if(free_name==undefined||free_name==""){ alert("이름을 입력하세요."); return; }
+	
+	if(free_email==undefined||free_email==""){ alert("이메일을 입력하세요."); return; }
+	
+	if(free_jumin==undefined||free_jumin==""){ alert("주민번호를 입력하세요."); return; }
+
+	if(skill1==false && skill2==false && skill3==false && skill4==false && skill5==false){
+		alert("기술을 선택하세요."); return; 
+	}
+	if(gender==undefined||gender==""){ alert("성별을 선택하세요."); return; }
+
+};
+
+this.btn_free_reset_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+{
+	this.free_name.set_value("");
+	this.free_email.set_value("");
+	this.free_jumin.set_value("");
+	this.skill1.set_value(false);
+	this.skill2.set_value(false);
+	this.skill3.set_value(false);
+	this.skill4.set_value(false);
+	this.skill5.set_value(false);
+	this.gender.set_value("");
+};
+]]></Script>
+    <Objects>
+      <Dataset id="ds_gender">
+        <ColumnInfo>
+          <Column id="gender_code" type="STRING" size="256"/>
+          <Column id="gender_name" type="STRING" size="256"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="gender_code">1</Col>
+            <Col id="gender_name">남</Col>
+          </Row>
+          <Row>
+            <Col id="gender_code">2</Col>
+            <Col id="gender_name">여</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+  </Form>
+</FDL>

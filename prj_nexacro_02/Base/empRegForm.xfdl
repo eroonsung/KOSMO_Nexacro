@@ -49,11 +49,12 @@
             </Format>
           </Formats>
         </Grid>
+        <Div id="Div00" taborder="13" text="Div00" left="540" top="47" width="300" height="133"/>
       </Layout>
     </Layouts>
-    <Script type="xscript5.1"><![CDATA[
-this.btn_emp_reg_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
+    <Script type="xscript5.1"><![CDATA[this.btn_emp_reg_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 {
+//this => form 태그를 관리하는 객체의 메위주
 	var emp_name = this.emp_name.value;
 	var uid = this.uid.value;
 	var pwd = this.pwd.value;
@@ -98,10 +99,68 @@ this.btn_emp_reg_onclick = function(obj:nexacro.Button,e:nexacro.ClickEventInfo)
 	if(skill1==false && skill2==false && skill3==false){
 		alert("기술을 선택하세요."); return; 
 	}
-
-
-};
-]]></Script>
+	return;
+	//-----------------------------------------------------------
+	//비동기방식으로 웹서버에 접속하여 직원 정보를 등록하고 
+	//그 결과를 받아와 현재 화면에 반영하기
+	//-----------------------------------------------------------
+	this.transaction(
+		//-----------------------------------------------------------
+		//현 비동기 방식 작업의 별칭 ID
+		//-----------------------------------------------------------		
+		"svc_empRegForm"
+		//-----------------------------------------------------------
+		//비동기 방식으로 접속할 웹서버 URL 주소
+		//-----------------------------------------------------------
+		, "http://localhost:8088/z_nexa_spring_01/empRegForm.do"
+		//-----------------------------------------------------------
+		//웹서버로 보낼 [Dataset 객체] 지정
+		//형식 => 서버에서 받을 Dataset객체저장키명=서버로보낼기존Dataset네임
+		//-----------------------------------------------------------	
+		, "in_emp=ds_emp"
+		//-----------------------------------------------------------
+		//웹서버가 보내온 데이터를 저장한 [Dataset] 지정
+		//형식=>"현화면에서받을Dataset객체저장키명=웹서버가보낸Dataset객체저장키명"형태이다.
+		//-----------------------------------------------------------
+		,""
+		//-----------------------------------------------------------
+		//웹서버로 보낼 문자열 지정
+		//형식=>"문자열저장변수명=문자열" 형태이다.
+		//-----------------------------------------------------------
+		,""
+		
+		//-----------------------------------------------------------
+		//웹서버의 응답이 끝난 후 호출할 콜백 함수를 문자열로 지정
+		//콜백함수 안에는 DB연동 결과 정보를 받아들인 후 실행할 코딩이 들어있다.
+		//-----------------------------------------------------------			
+		,"fn_callback"
+	);
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	//현재 화면에서 비동기로 웹서버와 통신한 후 호출할 함수 선언
+	//mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+	this.fn_callback=function(
+		svcID 		// 비동기로 웹서버와 통신할 때 주어진 작업의 별칭
+		, errCD		// 웹서버가 보낸 에러 코드 번호, 보통 음수면 서버쪽 작업이 실패한 것이다.
+		, errMSG	// 웹서버가 보낸 메시지
+	){
+		//-----------------------------------------------------------
+		//<1> 웹서버가 보낸 에러코드 번호가 0미만이면 경고하고 함수 중단하기
+		//-----------------------------------------------------------	
+		if(errCD<0){
+			this.alert(errMSG);
+			return;
+		}
+		//-----------------------------------------------------------
+		//웹서버가 보낸 에러코드번호가 0이상이면 (즉 DB연동 성공했으면)
+		//-----------------------------------------------------------			
+		else{
+			if(svcID=="svc_empRegForm"){
+				//웹서버가 보낸 메시지를 경고상자에 띄우기
+				this.alert(errMSG);
+			}
+		}
+	}
+};]]></Script>
     <Objects>
       <Dataset id="ds_emp">
         <ColumnInfo>
